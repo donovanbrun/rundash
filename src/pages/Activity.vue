@@ -28,13 +28,12 @@ const fetchAll = (id: number) => {
     if (activity.value) {
         segmentsByKm.value = functions.groupByKm(activity.value.segments, step);
     }
-    console.log(activity.value);
-    console.log(segmentsByKm.value);
 }
 
 const drawMap = () => {
     mapLayer.value?.clearLayers();
-    segmentsByKm.value.forEach((segments, i, segmentsGroup) => {
+    const group = functions.groupByKm(activity.value?.segments ?? [], 0.1);
+    group.forEach((segments, i, segmentsGroup) => {
         if (i == 0) {
             map.value?.setView([segments[0].lat, segments[0].lon], 15)
         }
@@ -82,6 +81,7 @@ const mapLayer: Ref<L.LayerGroup | undefined> = ref();
             <div class="Component wide">
                 <h2>Map</h2>
                 <div id="map"></div>
+                <p>Blue : slower than average speed; Green : equal average speed; Red : faster than average speed</p>
             </div>
 
             <div class="Component" v-if="activity">
@@ -110,7 +110,7 @@ const mapLayer: Ref<L.LayerGroup | undefined> = ref();
                         </tr>
                         <tr>
                             <td>Average pace</td>
-                            <td>{{ functions.speedToMinKm(activity.avgSpeed) }}/km</td>
+                            <td>{{ functions.speedToMinKm(activity.avgSpeed) }}</td>
                         </tr>
                     </tbody>
                 </table>

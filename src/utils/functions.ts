@@ -96,7 +96,7 @@ export const maxSpeed = (segments: Segment[]) => {
 export const speedToMinKm = (speed: number) => {
     const min = 60 / speed;
     const sec = (min - Math.floor(min)) * 60;
-    return `${Math.floor(min)}min${Math.floor(sec)}`;
+    return `${Math.floor(min)}min${Math.floor(sec)}/km`;
 }
 
 export const deltaTime = (segments: Segment[]) => {
