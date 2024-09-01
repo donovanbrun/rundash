@@ -21,7 +21,7 @@ export const averageHr = (segments: Segment[]) => {
     if (validData.length === 0) return 0;
 
     const sum = validData.reduce((acc, d) => acc + d.hr, 0);
-    return (sum / validData.length).toFixed(2);
+    return sum / validData.length;
 }
 
 export const maxHr = (segments: Segment[]) => {
@@ -93,10 +93,8 @@ export const maxSpeed = (segments: Segment[]) => {
     }, 0);
 }
 
-export const speedToMinKm = (segments: Segment[]) => {
-    const avgSpeed = averageSpeed(segments);
-    if (avgSpeed === 0) return 0;
-    const min = 60 / avgSpeed;
+export const speedToMinKm = (speed: number) => {
+    const min = 60 / speed;
     const sec = (min - Math.floor(min)) * 60;
     return `${Math.floor(min)}min${Math.floor(sec)}`;
 }
@@ -106,6 +104,13 @@ export const deltaTime = (segments: Segment[]) => {
     const first = new Date(segments[0].time);
     const last = new Date(segments[segments.length - 1].time);
     const diff = last.getTime() - first.getTime();
+    return diff;
+}
+
+export const formatNumber = (n: number) => n?.toFixed(2);
+
+export const formatTime = (ms: number) => {
+    const diff = Number(ms);
     const hours = Math.floor(diff / 1000 / 3600);
     const minutes = Math.floor((diff - hours * 1000 * 3600) / 1000 / 60);
     const seconds = Math.floor((diff - hours * 1000 * 3600 - minutes * 1000 * 60) / 1000);
@@ -137,6 +142,7 @@ export const groupByKm = (segments: Segment[], step: number): Segment[][] => {
             group = [];
         }
     }
+    groups.push(group);
 
     return groups;
 }

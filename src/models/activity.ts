@@ -1,11 +1,17 @@
 import { Segment } from "./segment";
 
+export enum ActivityType {
+    RUN = 'Run',
+    RIDE = 'Ride',
+}
+
 export class Activity {
 
     constructor(
         public id: number,
         public name: string,
         public date: string,
+        public type: ActivityType,
         public distance: number,
         public duration: number,
         public avgSpeed: number,
@@ -14,6 +20,5 @@ export class Activity {
         public maxHr: number,
         public minHr: number,
         public segments: Segment[],
-        public segmentsByKm: Segment[][],
     ) { }
 }

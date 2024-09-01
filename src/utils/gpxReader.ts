@@ -1,4 +1,6 @@
+import { Activity } from "../models/activity";
 import { Segment } from "../models/segment";
+import * as functions from "./functions";
 
 export function xmlToJson(xml: any) {
     let obj: any = {};
@@ -41,7 +43,7 @@ export function xmlToJson(xml: any) {
     return obj;
 }
 
-export async function readGpx(file: any): Promise<Segment[]> {
+export async function readGpx(file: any): Promise<Activity> {
     return new Promise((resolve) => {
         const data: Segment[] = [];
         const reader = new FileReader();
@@ -67,7 +69,22 @@ export async function readGpx(file: any): Promise<Segment[]> {
                     hr: Number(seg['trkpt'][i]?.['extensions']?.["gpxtpx:TrackPointExtension"]?.["gpxtpx:hr"]?.["#text"]) ?? 'N/A'
                 })
             }
-            resolve(data);
+
+            const activity: Activity = new Activity(
+                Math.floor(Number.MAX_SAFE_INTEGER * Math.random()),
+                json['trk']['name']["#text"] ?? 'New Activity',
+                json['metadata']?.['time']?.["#text"] ?? data[0].time,
+                null as any,
+                functions.distance(data),
+                functions.deltaTime(data),
+                functions.averageSpeed(data),
+                functions.maxSpeed(data),
+                functions.averageHr(data),
+                functions.maxHr(data),
+                functions.minHr(data),
+                data
+            );
+            resolve(activity);
         }
 
         reader.readAsText(file);

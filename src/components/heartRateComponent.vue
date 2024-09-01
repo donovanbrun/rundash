@@ -12,13 +12,13 @@ import {
     CategoryScale,
 } from 'chart.js';
 import * as functions from '../utils/functions';
-import { Segment } from '../models/segment';
+import { Activity } from '../models/activity';
 
 ChartJS.register(Title, Tooltip, Legend, LineElement, PointElement, LinearScale, CategoryScale);
 
 const props = defineProps({
-    data: {
-        type: Array,
+    activity: {
+        type: Activity,
         required: true,
     }
 });
@@ -42,12 +42,14 @@ function updateChartData(newData: any) {
 }
 
 watchEffect(() => {
-    updateChartData(props.data);
+    updateChartData(props.activity.segments);
 });
 
-const averageHr = computed(() => functions.averageHr(props.data as Segment[]));
+const averageHr = computed(() => functions.averageHr(props.activity.segments));
 
-const maxHr = computed(() => functions.maxHr(props.data as Segment[]));
+const maxHr = computed(() => functions.maxHr(props.activity.segments));
+
+const formatNumber = (n: number) => n.toFixed(2);
 
 </script>
 
@@ -63,8 +65,8 @@ const maxHr = computed(() => functions.maxHr(props.data as Segment[]));
             </thead>
             <tbody>
                 <tr>
-                    <td>{{ averageHr }} bpm</td>
-                    <td>{{ maxHr }} bpm</td>
+                    <td>{{ formatNumber(averageHr) }} bpm</td>
+                    <td>{{ formatNumber(maxHr) }} bpm</td>
                 </tr>
             </tbody>
         </table>
