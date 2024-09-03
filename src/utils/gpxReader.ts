@@ -57,23 +57,44 @@ export async function readGpx(file: any): Promise<Activity> {
             const xmlDoc = parser.parseFromString(xmlData, "application/xml");
 
             const json = xmlToJson(xmlDoc.documentElement);
+            const creator = (() => {
+                const c = json['@attributes']?.['creator'];
+                if (c === undefined) return 'Unknown';
+                if (c.toLowerCase().includes('garmin')) return 'Garmin';
+                if (c.toLowerCase().includes('strava')) return 'Strava';
+                if (c.toLowerCase().includes('polar')) return 'Polar';
+                if (c.toLowerCase().includes('samsung')) return 'Samsung';
+                if (c.toLowerCase().includes('suunto')) return 'Suunto';
+            })();
             const seg = json['trk']['trkseg'];
 
             for (let i = 0; i < seg['trkpt'].length; i++) {
-                data.push({
-                    id: i,
-                    time: seg['trkpt'][i]['time']['#text'],
-                    lat: Number(seg['trkpt'][i]['@attributes']['lat']),
-                    lon: Number(seg['trkpt'][i]['@attributes']['lon']),
-                    ele: Number(seg['trkpt'][i]['ele']?.['#text']) ?? 'N/A',
-                    hr: Number(seg['trkpt'][i]?.['extensions']?.["gpxtpx:TrackPointExtension"]?.["gpxtpx:hr"]?.["#text"]) ?? 'N/A'
-                })
+                const s = new Segment({});
+                s.id = i;
+                s.time = seg['trkpt'][i]['time']['#text'];
+                s.lat = Number(seg['trkpt'][i]['@attributes']['lat']);
+                s.lon = Number(seg['trkpt'][i]['@attributes']['lon']);
+                s.ele = Number(seg['trkpt'][i]['ele']?.['#text']) ?? 0;
+
+                switch (creator) {
+                    case 'Garmin':
+                        s.hr = Number(seg['trkpt'][i]?.['extensions']?.["ns3:TrackPointExtension"]?.["ns3:hr"]?.["#text"]);
+                        break;
+                    case 'Strava':
+                        s.hr = Number(seg['trkpt'][i]?.['extensions']?.["gpxtpx:TrackPointExtension"]?.["gpxtpx:hr"]?.["#text"]);
+                        break;
+                    case 'Samsung':
+                        s.hr = Number(seg['trkpt'][i]?.['extensions']?.["gpxtpx:TrackPointExtension"]?.["gpxtpx:hr"]?.["#text"]);
+                        break;
+                }
+
+                data.push(s);
             }
 
             const activity: Activity = new Activity(
                 Math.floor(Number.MAX_SAFE_INTEGER * Math.random()),
                 json['trk']['name']["#text"] ?? 'New Activity',
-                json['metadata']?.['time']?.["#text"] ?? data[0].time,
+                new Date(json['metadata']?.['time']?.["#text"] ?? data[0].time),
                 null as any,
                 functions.distance(data),
                 functions.deltaTime(data),
@@ -82,6 +103,10 @@ export async function readGpx(file: any): Promise<Activity> {
                 functions.averageHr(data),
                 functions.maxHr(data),
                 functions.minHr(data),
+                functions.elevationGain(data),
+                functions.elevationLoss(data),
+                functions.maxElevation(data),
+                functions.minElevation(data),
                 data
             );
             resolve(activity);

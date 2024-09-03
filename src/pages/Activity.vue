@@ -47,7 +47,13 @@ const drawMap = () => {
             else if (avg / (activity.value?.avgSpeed ?? 0) < 0.95) {
                 color = "blue"
             }
-            L.polyline(latLngs, { color }).addTo(mapLayer.value);
+            const p = L.polyline(latLngs, { color }).addTo(mapLayer.value);
+            p.bindPopup(`
+                Pace: ${functions.speedToMinKm(avg)}
+                <br>
+                HR: ${functions.formatNumber(functions.averageHr(segments))}
+                `);
+
 
             if (i < segmentsGroup.length - 1) {
                 const last = segments[segments.length - 1];
@@ -73,18 +79,20 @@ const segmentsByKm: Ref<Segment[][]> = ref([]);
 const map: Ref<L.Map | undefined> = ref();
 const mapLayer: Ref<L.LayerGroup | undefined> = ref();
 
+const showData = ref(false);
+
 </script>
 
 <template>
-    <div class="home">
+    <div class="page">
         <div class="list">
-            <div class="Component wide">
+            <div class="component wide">
                 <h2>Map</h2>
                 <div id="map"></div>
-                <p>Blue : slower than average speed; Green : equal average speed; Red : faster than average speed</p>
+                <p>Blue : slower than average speed; Green : equals average speed; Red : faster than average speed</p>
             </div>
 
-            <div class="Component" v-if="activity">
+            <div class="component" v-if="activity">
                 <h2>General Info</h2>
                 <table>
                     <tbody>
@@ -94,7 +102,7 @@ const mapLayer: Ref<L.LayerGroup | undefined> = ref();
                         </tr>
                         <tr>
                             <td>Date</td>
-                            <td>{{ activity.date }}</td>
+                            <td>{{ new Date(activity.date).toUTCString() }}</td>
                         </tr>
                         <tr>
                             <td>Type</td>
@@ -110,7 +118,11 @@ const mapLayer: Ref<L.LayerGroup | undefined> = ref();
                         </tr>
                         <tr>
                             <td>Average pace</td>
-                            <td>{{ functions.speedToMinKm(activity.avgSpeed) }}</td>
+                            <td>{{ functions.speedToMinKm(activity.avgSpeed) }} / km</td>
+                        </tr>
+                        <tr>
+                            <td>Gradient</td>
+                            <td>{{ functions.formatNumber(activity.elevationGain) }} m</td>
                         </tr>
                     </tbody>
                 </table>
@@ -118,7 +130,7 @@ const mapLayer: Ref<L.LayerGroup | undefined> = ref();
 
             <heartRateComponent :activity="activity" v-if="activity"></heartRateComponent>
 
-            <div class="Component" v-if="activity">
+            <div class="component" v-if="activity">
                 <h2>Statistics</h2>
                 <table>
                     <tbody>
@@ -130,23 +142,27 @@ const mapLayer: Ref<L.LayerGroup | undefined> = ref();
                             <td>Maximum speed</td>
                             <td>{{ functions.formatNumber(activity.maxSpeed) }} km/h</td>
                         </tr>
-                        <!-- <tr>
+                        <tr>
                             <td>Elevation gain</td>
-                            <td>{{ functions.formatNumber(evelationGain) }} m</td>
+                            <td>{{ functions.formatNumber(activity.elevationGain) }} m</td>
+                        </tr>
+                        <tr>
+                            <td>Elevation loss</td>
+                            <td>{{ functions.formatNumber(activity.elevationLoss) }} m</td>
                         </tr>
                         <tr>
                             <td>Minimum elevation</td>
-                            <td>{{ functions.formatNumber(minElevation) }} m</td>
+                            <td>{{ functions.formatNumber(activity.minElevation) }} m</td>
                         </tr>
                         <tr>
                             <td>Maximum elevation</td>
-                            <td>{{ functions.formatNumber(maxElevation) }} m</td>
-                        </tr> -->
+                            <td>{{ functions.formatNumber(activity.maxElevation) }} m</td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
 
-            <div class="Component" v-if="activity">
+            <div class="component" v-if="activity">
                 <h2>Segments</h2>
                 <table>
                     <thead>
@@ -166,7 +182,7 @@ const mapLayer: Ref<L.LayerGroup | undefined> = ref();
                 </table>
             </div>
 
-            <!-- <div class="Component" v-if="activity">
+            <div class="component" v-if="activity && showData">
                 <h2>Data</h2>
                 <table>
                     <thead>
@@ -190,7 +206,7 @@ const mapLayer: Ref<L.LayerGroup | undefined> = ref();
                         </tr>
                     </tbody>
                 </table>
-            </div> -->
+            </div>
         </div>
     </div>
 </template>

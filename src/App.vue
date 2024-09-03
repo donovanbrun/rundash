@@ -1,32 +1,24 @@
 <script setup lang="ts">
+import Nav from './components/Nav.vue';
 </script>
 
 <template>
-    <div class="home">
-        <nav>
-            <router-link to="/" class="nav-link">Home</router-link>
-        </nav>
+    <div class="app">
+        <Nav></Nav>
         <router-view></router-view>
     </div>
 </template>
 
-<style>
-.home {
+<style scoped>
+.app {
     display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    padding: 20px 0px;
-    flex-direction: column;
-    gap: 20px;
+    height: 100vh;
     background-color: #101010;
 }
 
-.nav-link {
-    color: white;
-    text-decoration: none;
-    padding: 10px;
-    border-radius: 5px;
-    background-color: #303030;
+@media (max-width: 768px) {
+    .app {
+        flex-direction: column;
+    }
 }
 </style>

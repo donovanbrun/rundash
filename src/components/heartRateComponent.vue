@@ -54,7 +54,7 @@ const formatNumber = (n: number) => n.toFixed(2);
 </script>
 
 <template>
-    <div class="Component">
+    <div class="component">
         <h2>Heart rate</h2>
         <table>
             <thead>

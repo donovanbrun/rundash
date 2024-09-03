@@ -25,3 +25,9 @@ export const saveActivity = (activity: Activity) => {
     }
     localStorage.setItem(ACTIVITY_KEY, JSON.stringify(activities));
 };
+
+export const deleteActivity = (id: number) => {
+    const activities = getActivities();
+    const newActivities = activities.filter((a: Activity) => a.id !== id);
+    localStorage.setItem(ACTIVITY_KEY, JSON.stringify(newActivities));
+};

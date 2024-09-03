@@ -1,5 +1,6 @@
 :root {
     --primary: #272727;
+    --background: #101010;
 }
 
 * {
@@ -7,6 +8,16 @@
     margin: 0px;
     box-sizing: border-box;
     font-family: Arial, Helvetica, sans-serif;
+}
+
+button {
+    padding: 10px;
+    margin: 10px 0;
+    border: none;
+    border-radius: 5px;
+    background-color: var(--primary);
+    color: white;
+    cursor: pointer;
 }
 
 input {
@@ -34,20 +45,8 @@ option {
     background-color: var(--primary);
 }
 
-.home {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    padding: 20px 0px;
-    flex-direction: column;
-    gap: 20px;
-    background-color: #101010;
-}
-
 h1 {
     color: white;
-    font-size: 4rem;
     width: 100%;
     text-align: center;
 }
@@ -66,22 +65,45 @@ th {
     text-align: left;
 }
 
+.page {
+    display: flex;
+    height: 100vh;
+    overflow: auto;
+    padding: 20px;
+    background-color: var(--background);
+    justify-content: center;
+    width: 100%;
+}
+
+.page::-webkit-scrollbar {
+    width: 10px;
+}
+
+.page::-webkit-scrollbar-track {
+    background: var(--background);
+}
+
+.page::-webkit-scrollbar-thumb {
+    background: var(--primary);
+    border-radius: 10px;
+}
+
 .list {
     display: flex;
     justify-content: center;
-    align-items: start;
     gap: 20px;
     flex-wrap: wrap;
 }
 
-.Component {
+.component {
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
     gap: 10px;
-    width: 500px;
+    min-width: 500px;
     max-width: 90vw;
+    height: fit-content;
     padding: 20px;
     background-color: var(--primary);
     border-radius: 15px;
@@ -97,5 +119,5 @@ th {
 
 .wide {
     width: 1000px;
-    max-width: 90vw;
+    max-width: 80vw;
 }

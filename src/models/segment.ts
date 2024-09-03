@@ -1,11 +1,11 @@
 export class Segment {
 
     id: number;
-    time: number;
+    time: Date;
     lat: number;
     lon: number;
-    ele: number;
-    hr: number;
+    ele: number | undefined;
+    hr: number | undefined;
 
     constructor(param: any) {
         this.id = param.id;
