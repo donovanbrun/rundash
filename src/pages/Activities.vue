@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Activity } from '../models/activity';
+import { Activity, ActivityType } from '../models/activity';
 import * as activityService from '../services/ActivityService';
 import { ref } from 'vue';
 import * as functions from '../utils/functions';
@@ -15,6 +15,11 @@ const deleteActivity = (id: number) => {
 
 const activities = ref<Activity[]>([]);
 fetchActivities();
+
+const updateActivityType = (activity: Activity, type: ActivityType) => {
+    activity.type = type;
+    activityService.saveActivity(activity);
+}
 </script>
 
 <template>
@@ -43,7 +48,12 @@ fetchActivities();
                                     </router-link>
                                 </td>
                                 <td>{{ new Date(activity.date).toUTCString() }}</td>
-                                <td>{{ activity.type }}</td>
+                                <td>
+                                    <select v-model="activity.type"
+                                        @change="updateActivityType(activity, activity.type)">
+                                        <option v-for="type in ActivityType" :value="type">{{ type }}</option>
+                                    </select>
+                                </td>
                                 <td>{{ functions.formatNumber(activity.distance) }} km</td>
                                 <td>{{ functions.formatTime(activity.duration) }}</td>
                                 <td>

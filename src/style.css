@@ -1,6 +1,8 @@
 :root {
     --primary: #272727;
+    --secondary: #303030;
     --background: #101010;
+    --accent: #ccc;
 }
 
 * {
@@ -13,9 +15,9 @@
 button {
     padding: 10px;
     margin: 10px 0;
-    border: none;
+    border: 1px solid var(--accent);
     border-radius: 5px;
-    background-color: var(--primary);
+    background-color: var(--secondary);
     color: white;
     cursor: pointer;
 }
@@ -24,7 +26,7 @@ input {
     width: 100%;
     padding: 10px;
     margin: 10px 0;
-    border: 1px solid #ccc;
+    border: 1px solid var(--accent);
     border-radius: 5px;
 }
 
@@ -32,17 +34,19 @@ select {
     width: 100%;
     padding: 10px;
     margin: 10px 0;
-    border: 1px solid #ccc;
+    border: 1px solid var(--accent);
     border-radius: 5px;
-    background-color: var(--primary);
+    background-color: var(--secondary);
+    color: white;
 }
 
 option {
     padding: 10px;
     margin: 10px 0;
-    border: 1px solid #ccc;
+    border: 1px solid var(--accent);
     border-radius: 5px;
-    background-color: var(--primary);
+    background-color: var(--secondary);
+    color: white;
 }
 
 h1 {
