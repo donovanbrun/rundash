@@ -30,7 +30,7 @@ const handleFileChange = async (e: any) => {
     }
 }
 
-const type = ref<ActivityType>(ActivityType.RUN);
+const type = ref<ActivityType>(ActivityType.RUNNING);
 const result = ref<String>("");
 </script>
 

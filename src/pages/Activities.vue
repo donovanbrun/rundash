@@ -28,6 +28,7 @@ fetchActivities();
                             <tr>
                                 <th>Name</th>
                                 <th>Date</th>
+                                <th>Type</th>
                                 <th>Distance</th>
                                 <th>Duration</th>
                                 <th>Actions</th>
@@ -42,6 +43,7 @@ fetchActivities();
                                     </router-link>
                                 </td>
                                 <td>{{ new Date(activity.date).toUTCString() }}</td>
+                                <td>{{ activity.type }}</td>
                                 <td>{{ functions.formatNumber(activity.distance) }} km</td>
                                 <td>{{ functions.formatTime(activity.duration) }}</td>
                                 <td>

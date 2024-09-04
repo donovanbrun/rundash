@@ -34,56 +34,115 @@ const activitiesLastYear = computed(() => {
     <div class="page">
         <div class="list">
             <div class="component">
-                <h2>This week</h2>
+                <h2>Overall Statistics</h2>
                 <table>
+                    <thead>
+                        <tr>
+                            <th rowspan="6"></th>
+                        </tr>
+                        <tr>
+                            <th colspan="2">Running</th>
+                            <th colspan="2">Cycling</th>
+                            <th colspan="2">Swimming</th>
+                        </tr>
+                        <tr>
+                            <th scope="col">Distance</th>
+                            <th scope="col">Duration</th>
+                            <th scope="col">Distance</th>
+                            <th scope="col">Duration</th>
+                            <th scope="col">Distance</th>
+                            <th scope="col">Duration</th>
+                        </tr>
+                    </thead>
                     <tbody>
                         <tr>
-                            <td>Distance</td>
+                            <th>This week</th>
                             <td>
-                                {{ functions.formatNumber(activitiesLastWeek.reduce((acc, a) => acc + a.distance, 0)) }}
+                                {{ functions.formatNumber(activitiesLastWeek.filter(a => a.type.toString() ===
+                                    'Running').reduce((acc, a) => acc + a.distance, 0)) }}
                                 km
                             </td>
-                        </tr>
-                        <tr>
-                            <td>Duration</td>
                             <td>
-                                {{ functions.formatTime(activitiesLastWeek.reduce((acc, a) => acc + a.duration, 0)) }}
+                                {{ functions.formatTime(activitiesLastWeek.filter(a => a.type.toString() ===
+                                    'Running').reduce((acc, a) => acc + a.duration, 0)) }}
                             </td>
-                        </tr>
-                    </tbody>
-                </table>
-                <h2>This month</h2>
-                <table>
-                    <tbody>
-                        <tr>
-                            <td>Distance</td>
                             <td>
-                                {{ functions.formatNumber(activitiesLastMonth.reduce((acc, a) => acc + a.distance, 0))
-                                }} km
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Duration</td>
-                            <td>
-                                {{ functions.formatTime(activitiesLastMonth.reduce((acc, a) => acc + a.duration, 0)) }}
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-                <h2>This year</h2>
-                <table>
-                    <tbody>
-                        <tr>
-                            <td>Distance</td>
-                            <td>
-                                {{ functions.formatNumber(activitiesLastYear.reduce((acc, a) => acc + a.distance, 0)) }}
+                                {{ functions.formatNumber(activitiesLastWeek.filter(a => a.type.toString() ===
+                                    'Cycling').reduce((acc, a) => acc + a.distance, 0)) }}
                                 km
                             </td>
+                            <td>
+                                {{ functions.formatTime(activitiesLastWeek.filter(a => a.type.toString() ===
+                                    'Cycling').reduce((acc, a) => acc + a.duration, 0)) }}
+                            </td>
+                            <td>
+                                {{ functions.formatNumber(activitiesLastWeek.filter(a => a.type.toString() ===
+                                    'Swimming').reduce((acc, a) => acc + a.distance, 0)) }}
+                                km
+                            </td>
+                            <td>
+                                {{ functions.formatTime(activitiesLastWeek.filter(a => a.type.toString() ===
+                                    'Swimming').reduce((acc, a) => acc + a.duration, 0)) }}
+                            </td>
                         </tr>
                         <tr>
-                            <td>Duration</td>
+                            <th>This month</th>
                             <td>
-                                {{ functions.formatTime(activitiesLastYear.reduce((acc, a) => acc + a.duration, 0)) }}
+                                {{ functions.formatNumber(activitiesLastMonth.filter(a => a.type.toString() ===
+                                    'Running').reduce((acc, a) => acc + a.distance, 0)) }}
+                                km
+                            </td>
+                            <td>
+                                {{ functions.formatTime(activitiesLastMonth.filter(a => a.type.toString() ===
+                                    'Running').reduce((acc, a) => acc + a.duration, 0)) }}
+                            </td>
+                            <td>
+                                {{ functions.formatNumber(activitiesLastMonth.filter(a => a.type.toString() ===
+                                    'Cycling').reduce((acc, a) => acc + a.distance, 0)) }}
+                                km
+                            </td>
+                            <td>
+                                {{ functions.formatTime(activitiesLastMonth.filter(a => a.type.toString() ===
+                                    'Cycling').reduce((acc, a) => acc + a.duration, 0)) }}
+                            </td>
+                            <td>
+                                {{ functions.formatNumber(activitiesLastMonth.filter(a => a.type.toString() ===
+                                    'Swimming').reduce((acc, a) => acc + a.distance, 0)) }}
+                                km
+                            </td>
+                            <td>
+                                {{ functions.formatTime(activitiesLastMonth.filter(a => a.type.toString() ===
+                                    'Swimming').reduce((acc, a) => acc + a.duration, 0)) }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>This year</th>
+                            <td>
+                                {{ functions.formatNumber(activitiesLastYear.filter(a => a.type.toString() ===
+                                    'Running').reduce((acc, a) => acc + a.distance, 0)) }}
+                                km
+                            </td>
+                            <td>
+                                {{ functions.formatTime(activitiesLastYear.filter(a => a.type.toString() ===
+                                    'Running').reduce((acc, a) => acc + a.duration, 0)) }}
+                            </td>
+                            <td>
+                                {{ functions.formatNumber(activitiesLastYear.filter(a => a.type.toString() ===
+                                    'Cycling').reduce((acc, a) => acc + a.distance, 0)) }}
+                                km
+                            </td>
+                            <td>
+                                {{ functions.formatTime(activitiesLastYear.filter(a => a.type.toString() ===
+                                    'Cycling').reduce((acc, a) => acc + a.duration, 0)) }}
+                            </td>
+                            <td>
+                                {{ functions.formatNumber(activitiesLastYear.filter(a => a.type.toString() ===
+                                    'Swimming').reduce((acc, a) => acc + a.distance, 0)) }}
+                                km
+                            </td>
+                            <td>
+                                {{ functions.formatTime(activitiesLastYear.filter(a => a.type.toString() ===
+                                    'Swimming').reduce((acc, a) => acc + a.duration, 0)) }}
                             </td>
                         </tr>
                     </tbody>

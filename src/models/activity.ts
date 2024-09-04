@@ -1,8 +1,9 @@
 import { Segment } from "./segment";
 
 export enum ActivityType {
-    RUN = 'Run',
-    RIDE = 'Ride',
+    RUNNING = 'Running',
+    CYCLING = 'Cycling',
+    SWIMMING = 'Swimming',
 }
 
 export class Activity {
