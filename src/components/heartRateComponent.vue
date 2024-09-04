@@ -49,8 +49,6 @@ const averageHr = computed(() => functions.averageHr(props.activity.segments));
 
 const maxHr = computed(() => functions.maxHr(props.activity.segments));
 
-const formatNumber = (n: number) => n.toFixed(2);
-
 </script>
 
 <template>
@@ -65,8 +63,8 @@ const formatNumber = (n: number) => n.toFixed(2);
             </thead>
             <tbody>
                 <tr>
-                    <td>{{ formatNumber(averageHr) }} bpm</td>
-                    <td>{{ formatNumber(maxHr) }} bpm</td>
+                    <td>{{ functions.formatNumber(averageHr, 0) }} bpm</td>
+                    <td>{{ functions.formatNumber(maxHr, 0) }} bpm</td>
                 </tr>
             </tbody>
         </table>

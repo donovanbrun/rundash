@@ -32,7 +32,7 @@ const fetchAll = (id: number) => {
 
 const drawMap = () => {
     mapLayer.value?.clearLayers();
-    const group = functions.groupByKm(activity.value?.segments ?? [], 0.1);
+    const group = functions.groupByKm(activity.value?.segments ?? [], resolution.value);
     group.forEach((segments, i, segmentsGroup) => {
         if (i == 0) {
             map.value?.setView([segments[0].lat, segments[0].lon], 15)
@@ -49,9 +49,11 @@ const drawMap = () => {
             }
             const p = L.polyline(latLngs, { color }).addTo(mapLayer.value);
             p.bindPopup(`
-                Pace: ${functions.speedToMinKm(avg)}
+                Pace: ${functions.speedToMinKm(avg)}/km
                 <br>
-                HR: ${functions.formatNumber(functions.averageHr(segments))}
+                HR: ${functions.formatNumber(functions.averageHr(segments), 0)} bpm
+                <br>
+                Gradient: ${functions.formatNumber(Math.fround(functions.gradient(segments)), 0)}%
                 `);
 
 
@@ -81,6 +83,8 @@ const mapLayer: Ref<L.LayerGroup | undefined> = ref();
 
 const showData = ref(false);
 
+const resolution = ref(0.1);
+
 </script>
 
 <template>
@@ -90,6 +94,13 @@ const showData = ref(false);
                 <h2>Map</h2>
                 <div id="map"></div>
                 <p>Blue : slower than average speed; Green : equals average speed; Red : faster than average speed</p>
+
+                <!-- <label for="select">Change resolution</label>
+                <select v-model="resolution" @change="drawMap()">
+                    <option value="0.1">100m</option>
+                    <option value="0.5">500m</option>
+                    <option value="1">1km</option>
+                </select> -->
             </div>
 
             <div class="component" v-if="activity">
@@ -170,13 +181,15 @@ const showData = ref(false);
                             <th>Distance</th>
                             <th>Average pace</th>
                             <th>Average Hr</th>
+                            <th>Elevation (m)</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr v-for="(segments, i) in segmentsByKm">
-                            <td>{{ functions.formatNumber(i * step) }}</td>
+                            <td>{{ functions.formatNumber(i * step) }} km</td>
                             <td>{{ functions.speedToMinKm(functions.averageSpeed(segments)) }}</td>
-                            <td>{{ functions.formatNumber(functions.averageHr(segments)) }}</td>
+                            <td>{{ functions.formatNumber(functions.averageHr(segments), 0) }}</td>
+                            <td>{{ functions.formatNumber(functions.sumElevation(segments), 0) }}</td>
                         </tr>
                     </tbody>
                 </table>

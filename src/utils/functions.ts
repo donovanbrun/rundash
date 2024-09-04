@@ -36,6 +36,38 @@ export const minHr = (segments: Segment[]) => {
     return filteredSegments.reduce((acc, d) => Math.min(acc, d.hr!), 1000);
 }
 
+export const gradient = (segments: Segment[]) => {
+    segments = segments.filter(s => s.ele! > 0);
+
+    if (segments.length === 0) return 0;
+
+    let totalElevationGain = 0;
+    let totalDistance = 0;
+
+    segments.reduce((prev, curr) => {
+        const elevationGain = curr.ele! - prev.ele!;
+        const distanceKm = getDistanceFromLatLonInKm(prev.lat, prev.lon, curr.lat, curr.lon);
+        const distanceM = distanceKm * 1000;
+        totalElevationGain += elevationGain;
+        totalDistance += distanceM;
+        return curr;
+    });
+
+    const gradientPercentage = (totalElevationGain / totalDistance) * 100;
+
+    return gradientPercentage;
+}
+
+export const sumElevation = (segments: Segment[]) => {
+    segments = segments.filter(s => s.ele! > 0);
+    if (segments.length === 0) return 0;
+    return segments.reduce((acc, d, index) => {
+        if (index === 0) return acc;
+        const prev = segments[index - 1];
+        return acc + (d.ele! - prev.ele!);
+    }, 0);
+}
+
 export const elevationGain = (segments: Segment[]) => {
     segments = segments.filter(s => s.ele! > 0);
     if (segments.length === 0) return 0;
@@ -111,7 +143,7 @@ export const deltaTime = (segments: Segment[]) => {
     return diff;
 }
 
-export const formatNumber = (n: number) => n?.toFixed(2);
+export const formatNumber = (n: number, m: number = 2) => n?.toFixed(m);
 
 export const formatTime = (ms: number) => {
     const diff = Number(ms);
