@@ -2,7 +2,7 @@
 import { Activity, ActivityType } from '../models/activity';
 import * as activityService from '../services/ActivityService';
 import { ref } from 'vue';
-import * as functions from '../utils/functions';
+import * as format from '../utils/format';
 
 const fetchActivities = () => {
     activities.value = activityService.getActivities().sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
@@ -54,8 +54,8 @@ const updateActivityType = (activity: Activity, type: ActivityType) => {
                                         <option v-for="type in ActivityType" :value="type">{{ type }}</option>
                                     </select>
                                 </td>
-                                <td>{{ functions.formatNumber(activity.distance) }} km</td>
-                                <td>{{ functions.formatTime(activity.duration) }}</td>
+                                <td>{{ format.formatNumber(activity.distance) }} km</td>
+                                <td>{{ format.formatTime(activity.duration) }}</td>
                                 <td>
                                     <button @click="deleteActivity(activity.id)">Delete</button>
                                 </td>

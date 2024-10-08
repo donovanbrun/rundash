@@ -36,6 +36,52 @@ export const minHr = (segments: Segment[]) => {
     return filteredSegments.reduce((acc, d) => Math.min(acc, d.hr!), 1000);
 }
 
+export const hrZones = (segments: Segment[], maxHr: number) => {
+    const filteredSegments = segments.filter(segment => segment.hr !== undefined);
+    if (filteredSegments.length === 0) return [0, 0, 0, 0, 0];
+
+    const zones = [0, 0, 0, 0, 0];
+    const zoneThresholds = [
+        maxHr * 0.6, // Zone 1: jusqu'à 60% de la FC max
+        maxHr * 0.7, // Zone 2: 60% - 70% de la FC max
+        maxHr * 0.8, // Zone 3: 70% - 80% de la FC max
+        maxHr * 0.9, // Zone 4: 80% - 90% de la FC max
+        maxHr        // Zone 5: > 90% de la FC max
+    ];
+
+    let totalDuration = 0;
+
+    for (let i = 0; i < filteredSegments.length - 1; i++) {
+        const current = filteredSegments[i];
+        const next = filteredSegments[i + 1];
+
+        // Assurez-vous que `time` est bien un objet `Date`
+        const currentTime = current.time instanceof Date ? current.time : new Date(current.time);
+        const nextTime = next.time instanceof Date ? next.time : new Date(next.time);
+
+        const duration = (nextTime.getTime() - currentTime.getTime()) / 1000;
+        totalDuration += duration;
+
+        if (current.hr !== undefined) {
+            if (current.hr <= zoneThresholds[0]) {
+                zones[0] += duration; // Zone 1
+            } else if (current.hr <= zoneThresholds[1]) {
+                zones[1] += duration; // Zone 2
+            } else if (current.hr <= zoneThresholds[2]) {
+                zones[2] += duration; // Zone 3
+            } else if (current.hr <= zoneThresholds[3]) {
+                zones[3] += duration; // Zone 4
+            } else {
+                zones[4] += duration; // Zone 5
+            }
+        }
+    }
+
+    const zonePercentages = zones.map(zoneDuration => (zoneDuration / totalDuration) * 100);
+
+    return zonePercentages;
+};
+
 export const gradient = (segments: Segment[]) => {
     segments = segments.filter(s => s.ele! > 0);
 
@@ -128,29 +174,12 @@ export const maxSpeed = (segments: Segment[]) => {
     }, 0);
 }
 
-export const speedToMinKm = (speed: number) => {
-    if (speed === 0) return '0:00';
-    const min = 60 / speed;
-    const sec = (min - Math.floor(min)) * 60;
-    return `${Math.floor(min)}:${Math.floor(sec) < 10 ? '0' + Math.floor(sec) : Math.floor(sec)}`;
-}
-
 export const deltaTime = (segments: Segment[]) => {
     if (segments.length === 0) return 0;
     const first = new Date(segments[0].time);
     const last = new Date(segments[segments.length - 1].time);
     const diff = last.getTime() - first.getTime();
     return diff;
-}
-
-export const formatNumber = (n: number, m: number = 2) => n?.toFixed(m);
-
-export const formatTime = (ms: number) => {
-    const diff = Number(ms);
-    const hours = Math.floor(diff / 1000 / 3600);
-    const minutes = Math.floor((diff - hours * 1000 * 3600) / 1000 / 60);
-    const seconds = Math.floor((diff - hours * 1000 * 3600 - minutes * 1000 * 60) / 1000);
-    return `${hours}h ${minutes}m ${seconds}s`;
 }
 
 export const groupByKm = (segments: Segment[], step: number): Segment[][] => {

@@ -6,6 +6,7 @@ import { Segment } from '../models/segment';
 import { Activity } from '../models/activity';
 import heartRateComponent from '../components/heartRateComponent.vue';
 import * as functions from '../utils/functions';
+import * as format from '../utils/format';
 import { useRoute } from 'vue-router';
 import * as activityService from '../services/ActivityService';
 
@@ -49,11 +50,11 @@ const drawMap = () => {
             }
             const p = L.polyline(latLngs, { color }).addTo(mapLayer.value);
             p.bindPopup(`
-                Pace: ${functions.speedToMinKm(avg)}/km
+                Pace: ${format.speedToMinKm(avg)}/km
                 <br>
-                HR: ${functions.formatNumber(functions.averageHr(segments), 0)} bpm
+                HR: ${format.formatNumber(functions.averageHr(segments), 0)} bpm
                 <br>
-                Gradient: ${functions.formatNumber(Math.fround(functions.gradient(segments)), 0)}%
+                Gradient: ${format.formatNumber(Math.fround(functions.gradient(segments)), 0)}%
                 `);
 
 
@@ -121,19 +122,19 @@ const resolution = ref(0.1);
                         </tr>
                         <tr>
                             <td>Distance</td>
-                            <td>{{ functions.formatNumber(activity.distance) }} km</td>
+                            <td>{{ format.formatNumber(activity.distance) }} km</td>
                         </tr>
                         <tr>
                             <td>Total time</td>
-                            <td>{{ functions.formatTime(activity.duration) }}</td>
+                            <td>{{ format.formatTime(activity.duration) }}</td>
                         </tr>
                         <tr>
                             <td>Average pace</td>
-                            <td>{{ functions.speedToMinKm(activity.avgSpeed) }} / km</td>
+                            <td>{{ format.speedToMinKm(activity.avgSpeed) }} / km</td>
                         </tr>
                         <tr>
                             <td>Gradient</td>
-                            <td>{{ functions.formatNumber(activity.elevationGain) }} m</td>
+                            <td>{{ format.formatNumber(activity.elevationGain) }} m</td>
                         </tr>
                     </tbody>
                 </table>
@@ -147,27 +148,27 @@ const resolution = ref(0.1);
                     <tbody>
                         <tr>
                             <td>Average speed</td>
-                            <td>{{ functions.formatNumber(activity.avgSpeed) }} km/h</td>
+                            <td>{{ format.formatNumber(activity.avgSpeed) }} km/h</td>
                         </tr>
                         <tr>
                             <td>Maximum speed</td>
-                            <td>{{ functions.formatNumber(activity.maxSpeed) }} km/h</td>
+                            <td>{{ format.formatNumber(activity.maxSpeed) }} km/h</td>
                         </tr>
                         <tr>
                             <td>Elevation gain</td>
-                            <td>{{ functions.formatNumber(activity.elevationGain) }} m</td>
+                            <td>{{ format.formatNumber(activity.elevationGain) }} m</td>
                         </tr>
                         <tr>
                             <td>Elevation loss</td>
-                            <td>{{ functions.formatNumber(activity.elevationLoss) }} m</td>
+                            <td>{{ format.formatNumber(activity.elevationLoss) }} m</td>
                         </tr>
                         <tr>
                             <td>Minimum elevation</td>
-                            <td>{{ functions.formatNumber(activity.minElevation) }} m</td>
+                            <td>{{ format.formatNumber(activity.minElevation) }} m</td>
                         </tr>
                         <tr>
                             <td>Maximum elevation</td>
-                            <td>{{ functions.formatNumber(activity.maxElevation) }} m</td>
+                            <td>{{ format.formatNumber(activity.maxElevation) }} m</td>
                         </tr>
                     </tbody>
                 </table>
@@ -186,10 +187,10 @@ const resolution = ref(0.1);
                     </thead>
                     <tbody>
                         <tr v-for="(segments, i) in segmentsByKm">
-                            <td>{{ functions.formatNumber(i * step) }} km</td>
-                            <td>{{ functions.speedToMinKm(functions.averageSpeed(segments)) }}</td>
-                            <td>{{ functions.formatNumber(functions.averageHr(segments), 0) }}</td>
-                            <td>{{ functions.formatNumber(functions.sumElevation(segments), 0) }}</td>
+                            <td>{{ format.formatNumber(i * step) }} km</td>
+                            <td>{{ format.speedToMinKm(functions.averageSpeed(segments)) }}</td>
+                            <td>{{ format.formatNumber(functions.averageHr(segments), 0) }}</td>
+                            <td>{{ format.formatNumber(functions.sumElevation(segments), 0) }}</td>
                         </tr>
                     </tbody>
                 </table>

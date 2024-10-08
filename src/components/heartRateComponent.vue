@@ -12,7 +12,9 @@ import {
     CategoryScale,
 } from 'chart.js';
 import * as functions from '../utils/functions';
+import * as format from '../utils/format';
 import { Activity } from '../models/activity';
+import * as settingService from '../services/SettingService';
 
 ChartJS.register(Title, Tooltip, Legend, LineElement, PointElement, LinearScale, CategoryScale);
 
@@ -49,6 +51,11 @@ const averageHr = computed(() => functions.averageHr(props.activity.segments));
 
 const maxHr = computed(() => functions.maxHr(props.activity.segments));
 
+const zones = computed(() => {
+    const settings = settingService.getSettings();
+    return functions.hrZones(props.activity.segments, settings?.max_heart_rate ?? 200);
+});
+
 </script>
 
 <template>
@@ -63,15 +70,27 @@ const maxHr = computed(() => functions.maxHr(props.activity.segments));
             </thead>
             <tbody>
                 <tr>
-                    <td>{{ functions.formatNumber(averageHr, 0) }} bpm</td>
-                    <td>{{ functions.formatNumber(maxHr, 0) }} bpm</td>
+                    <td>{{ format.formatNumber(averageHr, 0) }} bpm</td>
+                    <td>{{ format.formatNumber(maxHr, 0) }} bpm</td>
                 </tr>
             </tbody>
         </table>
         <!-- <Line :data="chartData" /> -->
+        <table>
+            <thead>
+                <tr>
+                    <th>Zone</th>
+                    <th>Duration</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="(zone, index) in zones" :key="index">
+                    <td>Zone {{ index + 1 }}</td>
+                    <td>{{ format.formatNumber(zone, 0) }}%</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 </template>
 
-<style scoped>
-/* Styles spécifiques au composant */
-</style>
+<style scoped></style>
