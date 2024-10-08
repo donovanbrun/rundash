@@ -35,6 +35,8 @@ onMounted(async () => {
             console.error(e);
         }
     }
+
+    await stravaService.disconnect(token);
     done.value = true;
 });
 </script>

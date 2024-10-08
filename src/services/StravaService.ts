@@ -46,3 +46,15 @@ export const getActivity = async (accessToken: string, id: number) => {
         segments: strava_segments.data
     };
 }
+
+export const disconnect = async (accessToken: string) => {
+    return axios.post(
+        `https://www.strava.com/oauth/deauthorize`,
+        {},
+        {
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            }
+        }
+    );
+}
