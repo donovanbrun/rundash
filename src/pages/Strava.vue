@@ -23,11 +23,11 @@ onMounted(async () => {
         nbActivities.value = a.data.length;
     }
 
-    for (const a of activites.value) {
+    for (const act of activites.value) {
         try {
-            const act = await stravaService.getActivity(token, a.id);
-            const activity = await stravaConverter.convertStravaToActivity(act);
-            activityService.saveActivity(activity);
+            const segments = await stravaService.getActivitySegments(token, act.id);
+            const activity = await stravaConverter.convertStravaToActivity(act, segments);
+            await activityService.saveActivity(activity);
             success.value++;
         }
         catch (e) {

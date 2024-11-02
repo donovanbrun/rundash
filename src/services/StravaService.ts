@@ -22,15 +22,7 @@ export const getActivities = async (accessToken: string) => {
     );
 }
 
-export const getActivity = async (accessToken: string, id: number) => {
-    const strava_activity = await axios.get(
-        `https://www.strava.com/api/v3/activities/${id}`,
-        {
-            headers: {
-                Authorization: `Bearer ${accessToken}`
-            }
-        }
-    );
+export const getActivitySegments = async (accessToken: string, id: number) => {
 
     const strava_segments = await axios.get(
         `https://www.strava.com/api/v3/activities/${id}/streams?keys=latlng,time,heartrate,altitude&key_by_type=true`,
@@ -41,10 +33,7 @@ export const getActivity = async (accessToken: string, id: number) => {
         }
     );
 
-    return {
-        activity: strava_activity.data,
-        segments: strava_segments.data
-    };
+    return strava_segments.data;
 }
 
 export const disconnect = async (accessToken: string) => {

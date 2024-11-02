@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
 import * as settingService from '../services/SettingService';
+import * as activityService from '../services/ActivityService';
 
 const settings = ref({
     max_heart_rate: "200",
@@ -25,6 +26,7 @@ const updateSetting = (fieldName: string, value: string) => {
 
 const deleteAllData = () => {
     localStorage.clear();
+    activityService.clearActivities();
 }
 
 const resetSettings = () => {

@@ -1,11 +1,14 @@
 <script setup lang="ts">
 import { Activity, ActivityType } from '../models/activity';
 import * as activityService from '../services/ActivityService';
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import * as format from '../utils/format';
 
-const fetchActivities = () => {
-    activities.value = activityService.getActivities().sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+const activities = ref<Activity[]>([]);
+
+const fetchActivities = async () => {
+    const acts = await activityService.getActivities();
+    activities.value = acts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 }
 
 const deleteActivity = (id: number) => {
@@ -13,8 +16,9 @@ const deleteActivity = (id: number) => {
     fetchActivities();
 }
 
-const activities = ref<Activity[]>([]);
-fetchActivities();
+onMounted(async () => {
+    await fetchActivities();
+});
 
 const updateActivityType = (activity: Activity, type: ActivityType) => {
     activity.type = type;

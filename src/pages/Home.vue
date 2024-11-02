@@ -4,8 +4,8 @@ import * as activityService from '../services/ActivityService';
 import { ref, computed } from 'vue';
 import * as format from '../utils/format';
 
-const fetchActivities = () => {
-    activities.value = activityService.getActivities().sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+const fetchActivities = async () => {
+    activities.value = (await activityService.getActivities()).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 }
 
 const activities = ref<Activity[]>([]);

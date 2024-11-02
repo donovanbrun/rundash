@@ -20,12 +20,12 @@ onMounted(() => {
 
     mapLayer.value = L.layerGroup().addTo(map.value);
 
-    fetchAll(Number.parseInt(route.params.id.toString()));
-    drawMap();
+    fetchAll(Number.parseInt(route.params.id.toString()))
+        .then(() => drawMap());
 });
 
-const fetchAll = (id: number) => {
-    activity.value = activityService.getActivity(id);
+const fetchAll = async (id: number) => {
+    activity.value = await activityService.getActivity(id);
     if (activity.value) {
         segmentsByKm.value = functions.groupByKm(activity.value.segments, step);
     }
@@ -70,8 +70,8 @@ const drawMap = () => {
 watch(
     () => route.params.id,
     (newId) => {
-        fetchAll(Number.parseInt(newId.toString()));
-        drawMap();
+        fetchAll(Number.parseInt(newId.toString()))
+            .then(() => drawMap());
     }
 )
 

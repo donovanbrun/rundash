@@ -1,5 +1,5 @@
 <script setup lang="ts">
-
+const URL = import.meta.env.VITE_APP_URL;
 </script>
 
 <template>
@@ -10,7 +10,7 @@
         <router-link to="/upload" class="nav-link">Upload activities</router-link>
         <router-link to="/settings" class="nav-link">Settings</router-link>
         <a
-            href="http://www.strava.com/oauth/authorize?client_id=123685&response_type=code&redirect_uri=http://localhost:5173/strava&approval_prompt=force&scope=activity:read_all">
+            :href="`http://www.strava.com/oauth/authorize?client_id=123685&response_type=code&redirect_uri=${URL}/strava&approval_prompt=force&scope=activity:read_all`">
             connect to strava
         </a>
     </nav>
